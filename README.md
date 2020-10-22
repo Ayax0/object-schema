@@ -18,7 +18,7 @@ var userSchema = new ObjectSchema({
   age: { type: Number, default: 20 },
   posts: [
     {
-      _id: { type: String, alias: 'id },
+      _id: { type: String, alias: 'id' },
       text: { type: String, require: true },
     }
   ],
