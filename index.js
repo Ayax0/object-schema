@@ -31,16 +31,16 @@ module.exports = class ObjectSchema {
         this.schema = schema;
     }
 
-    filter(item) {
+    filter(item, reduce) {
         try {
-            if(Array.isArray(this.schema)) return this.filterArray(item);
-            else return this.filterObject(item);
+            if(Array.isArray(this.schema)) return this.filterArray(item, null, reduce);
+            else return this.filterObject(item, null, reduce);
         }catch(error) {
             return error;
         }
     }
 
-    filterObject(object, _schema) {
+    filterObject(object, _schema, reduce) {
         return new Promise(async (resolve, reject) => {
             //Define Object Schema
             if(!_schema) _schema = this.schema;
@@ -49,7 +49,8 @@ module.exports = class ObjectSchema {
             var filteredObject = {};
 
             //Check if Provided Object is empty
-            if(object == undefined) return resolve(generateDumy(_schema));
+            if(object == undefined && reduce != true) return resolve(generateDumy(_schema));
+            if(object == undefined && reduce == true) return resolve(undefined);
             
             //Loop over all Schema fields
             for(const [key, value] of Object.entries(_schema)) {
@@ -66,7 +67,7 @@ module.exports = class ObjectSchema {
                     //If Object is an Array
                     if(Array.isArray(value)) {
                         try {
-                            formatedValue = await this.filterArray(object[key], value);
+                            formatedValue = await this.filterArray(object[key], value, reduce);
                         } catch(error) {
                             return reject(error);
                         }
@@ -76,7 +77,7 @@ module.exports = class ObjectSchema {
                         //If Type is SubObject
                         else {
                             try {
-                                formatedValue = await this.filterObject(object[key], _schema[key]);
+                                formatedValue = await this.filterObject(object[key], _schema[key], reduce);
                             }catch(error) {
                                 return reject(error);
                             }
@@ -99,15 +100,18 @@ module.exports = class ObjectSchema {
                 if(valueOptions && value.require && formatedValue == undefined) return reject(new Error(`SchemaError: Field '${fieldName}' is empty but required`));
 
                 //Write Formated Value to new Object
-                filteredObject[fieldName] = formatedValue;
+                if(!(reduce == true && formatedValue == undefined)) filteredObject[fieldName] = formatedValue;
             }
 
             //Return Object
-            return resolve(filteredObject);
+            if(Object.keys(filteredObject).length > 0)
+                return resolve(filteredObject);
+            else
+                return resolve(undefined);
         });
     }
 
-    filterArray(array, _schema) {
+    filterArray(array, _schema, reduce) {
         return new Promise(async (resolve, reject) => {
             //Define Object Schema
             if(!_schema) _schema = this.schema;
@@ -116,7 +120,8 @@ module.exports = class ObjectSchema {
             if(!Array.isArray(_schema)) return reject(new Error("SchemaError: schema is no array"));
 
             //Check if Provided Object is empty
-            if(array == undefined) return resolve([]);
+            if(array == undefined && reduce != true) return resolve([]);
+            if(array == undefined && reduce == true) return resolve(undefined);
 
             //Return if Data is no Array
             if(!Array.isArray(array)) return resolve(undefined);
@@ -134,15 +139,16 @@ module.exports = class ObjectSchema {
                 if(typeof arrayEntity == 'function') formatedArray.push(formatData(item, arrayEntity));
                 else if(typeof arrayEntity == 'object') {
                     try {
-                        formatedArray.push(await this.filterObject(item, arrayEntity));
+                        let formatedObject = await this.filterObject(item, arrayEntity), reduce;
+                        formatedArray.push(formatedObject);
                     }catch(error) {
                         return reject(error);
                     }
                 }
             });
-
+            
             //Return Array
-            return resolve(formatedArray);
+            return resolve(reduce == true && formatedArray.length == 0 ? undefined : formatedArray);
         });
     }
 
