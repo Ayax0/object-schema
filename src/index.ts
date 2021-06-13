@@ -6,7 +6,7 @@ interface SchemaOptions {
     strictType?: boolean;
 }
 
-module.exports = class ObjectSchema {
+export default class ObjectSchema {
     private schema: Object | Array<any>;
 
     private readonly DEFAULT_OPTIONS: SchemaOptions = {
@@ -204,4 +204,4 @@ module.exports = class ObjectSchema {
             return resolve(emptyObject);
         });
     }
-};
+}
