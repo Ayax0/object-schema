@@ -6,35 +6,50 @@ Inspired by Mongoose Schema to apply a predefined Schema to a javascript Object.
 npm install @nextlvlup/object-schema
 ```
 
-# Very basic usage example
+### Very basic usage example
 
 ```js
-var ObjectSchema = require('@nextlvlup/object-schema');
+import ObjectSchema from '@nextlvlup/object-schema';
 
 // Create User schema
-var userSchema = new ObjectSchema({
-  firstName: String,
-  lastName: String,
-  age: { type: Number, default: 20 },
-  posts: [
-    {
-      _id: { type: String, alias: 'id' },
-      text: { type: String, required: true },
-    }
-  ],
-  permissions: [ String ]
+const userSchema = new ObjectSchema({
+    firstName: String,
+    lastName: String,
+    age: { type: Number, default: 20 },
+    posts: [
+        {
+            _id: { type: String, alias: "id" },
+            text: { type: String, required: true },
+        },
+    ],
+    permissions: [String],
 });
 
-// Apply Schema to Object
-userSchema.filter(object)
-.then((result) => /* filtered object */)
-.catch((err) => /* errors */);
-
-/* Apply Schema an Reduce
- * if the second parameter is true,
- * empty fields are removed from the object
+/* Apply Schema an Options
+ * the second parameter is optional,
+ * valide options: reduce / strictType
  */
-userSchema.filter(object, true)
-.then((result) => /* filtered and reduced object */)
-.catch((err) => /* errors */);
+userSchema
+    .filter(object, { reduce: false, strictType: false })
+    .then((result) => /* filtered and reduced object */)
+    .catch((err) => /* errors */);
 ```
+
+### Field Options
+
+| Option   | Input                     |
+| -------- | ------------------------- |
+| type     | String / Number / Boolean |
+| required | true / false              |
+| default  | any                       |
+| alias    | "aliasName"               |
+
+### Filter Options
+
+| Option     | Description              |
+| ---------- | ------------------------ |
+| reduce     | remove empty objects     |
+| strictType | error if type dont match |
+
+-   if reduce is disabled, every empty object will be filled with undefined
+-   if strictType is disabled, every wrong type will be converted
