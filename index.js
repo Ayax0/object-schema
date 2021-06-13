@@ -1,4 +1,4 @@
-export default class ObjectSchema {
+module.exports = class ObjectSchema {
     constructor(schema) {
         this.DEFAULT_OPTIONS = {
             reduce: false,
@@ -198,4 +198,4 @@ export default class ObjectSchema {
             return resolve(emptyObject);
         });
     }
-}
+};

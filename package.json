@@ -1,11 +1,13 @@
 {
     "name": "@nextlvlup/object-schema",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "main": "index.js",
     "author": "",
     "license": "ISC",
     "dependencies": {},
-    "devDependencies": {},
+    "devDependencies": {
+        "@types/node": "^15.12.2"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
