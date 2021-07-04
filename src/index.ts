@@ -59,7 +59,7 @@ export default class ObjectSchema {
                     if (value.alias) formatedKey = value.alias;
 
                     //Format Value
-                    if (item[key]) {
+                    if (item[key] != undefined) {
                         try {
                             formatedValue = await this.formatField(item[key], value.type, options);
                         } catch (error) {
@@ -99,6 +99,7 @@ export default class ObjectSchema {
                 }
 
                 //Write Formated Field to Object
+                console.log(formatedKey || key, formatedValue);
                 if (!(options.reduce && formatedValue == undefined)) filteredObject[formatedKey ? formatedKey : key] = formatedValue;
             }
 
@@ -107,7 +108,7 @@ export default class ObjectSchema {
     }
 
     private filterArray(item: Array<any>, options: SchemaOptions, subschema: Array<any>): Promise<Object> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             //Check if empty
             if (item == undefined && !options.reduce) return resolve([]);
             if (item == undefined && options.reduce) return resolve(undefined);
@@ -122,7 +123,8 @@ export default class ObjectSchema {
             var arraySchema = subschema[0];
             var formatedArray = [];
 
-            item.forEach(async (subitem) => {
+            for (var i = 0; i < item.length; i++) {
+                const subitem = item[i];
                 if (typeof arraySchema == "object") {
                     if (Array.isArray(arraySchema)) return reject("SchemaError: Array can't hold other array");
 
@@ -138,8 +140,7 @@ export default class ObjectSchema {
                         return reject(error);
                     }
                 }
-            });
-
+            }
             return resolve(options.reduce && formatedArray.length == 0 ? undefined : formatedArray);
         });
     }
