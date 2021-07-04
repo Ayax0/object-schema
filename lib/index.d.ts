@@ -1,4 +1,4 @@
-interface SchemaOptions {
+export interface SchemaOptions {
     reduce?: boolean;
     strictType?: boolean;
 }
@@ -12,5 +12,4 @@ export default class ObjectSchema {
     private formatField;
     private generateEmptyObject;
 }
-export {};
 //# sourceMappingURL=index.d.ts.map
