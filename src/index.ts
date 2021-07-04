@@ -99,7 +99,6 @@ export default class ObjectSchema {
                 }
 
                 //Write Formated Field to Object
-                console.log(formatedKey || key, formatedValue);
                 if (!(options.reduce && formatedValue == undefined)) filteredObject[formatedKey ? formatedKey : key] = formatedValue;
             }
 
