@@ -1,7 +1,7 @@
 type FieldTypesConstructor = StringConstructor | NumberConstructor | BooleanConstructor | ObjectConstructor | ArrayConstructor;
 type FieldTypes = String | Number | Boolean | null | Object | Array<String | Number | Boolean | null | Object>;
 
-interface SchemaOptions {
+export interface SchemaOptions {
     reduce?: boolean;
     strictType?: boolean;
 }
