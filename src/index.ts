@@ -146,7 +146,7 @@ export default class ObjectSchema {
 
     private formatField(data: FieldTypes, type: FieldTypesConstructor, options: SchemaOptions) {
         return new Promise((resolve, reject) => {
-            if (data == undefined) return resolve(data);
+            if (data == undefined) return resolve(null);
             switch (type) {
                 case String:
                     if (typeof data != "string" && options.strictType)
@@ -189,7 +189,7 @@ export default class ObjectSchema {
                     if (value.default) formatedValue = await this.formatField(value.default, value.type, options);
                     if (value.alias) formatedKey = value.alias;
 
-                    emptyObject[formatedKey ? formatedKey : key] = formatedValue ? formatedValue : undefined;
+                    emptyObject[formatedKey ? formatedKey : key] = formatedValue ? formatedValue : null;
                 } else {
                     if (typeof value == "object") {
                         try {
@@ -197,7 +197,7 @@ export default class ObjectSchema {
                         } catch (error) {
                             return reject(error);
                         }
-                    } else emptyObject[key] = undefined;
+                    } else emptyObject[key] = null;
                 }
             }
 
