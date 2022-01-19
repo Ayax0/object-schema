@@ -69,6 +69,9 @@ export default class ObjectSchema {
 
                     //Required
                     if (formatedValue == undefined && value.required) return reject(new Error(`SchemaError: Field '${key}' is empty but required`));
+
+                    //Regex
+                    if (value.regex && !value.regex.test(formatedValue)) return reject(new Error(`SchemaError: Field '${key}' dont match regex`));
                 }
                 // if only type provided
                 else {

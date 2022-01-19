@@ -43,6 +43,7 @@ userSchema
 | required | true / false              |
 | default  | any                       |
 | alias    | "aliasName"               |
+| regex    | /regexPatern/             |
 
 ### Filter Options
 
