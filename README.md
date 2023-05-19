@@ -12,7 +12,20 @@ npm install @nextlvlup/object-schema
 import ObjectSchema from '@nextlvlup/object-schema';
 
 // Create User schema
-const userSchema = new ObjectSchema({
+interface User {
+    firstName?: string;
+    lastName?: string;
+    age: number;
+    posts: [
+        {
+            id?: string;
+            text: string;
+        }
+    ],
+    permissions: string[];
+}
+
+const userSchema = new ObjectSchema<User>({
     firstName: String,
     lastName: String,
     age: { type: Number, default: 20 },
