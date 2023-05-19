@@ -31,9 +31,9 @@ export default class ObjectSchema<T> {
         });
     }
 
-    private filterObject(item: any, options: SchemaOptions, subschema: Object): Promise<Object> {
+    private filterObject(item: any, options: SchemaOptions, subschema: Object): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            var filteredObject = {};
+            var filteredObject: any = {};
 
             //Check if empty
             if (item == undefined && !options.reduce) {
@@ -109,7 +109,7 @@ export default class ObjectSchema<T> {
         });
     }
 
-    private filterArray(item: Array<any>, options: SchemaOptions, subschema: Array<any>): Promise<Object> {
+    private filterArray(item: Array<any>, options: SchemaOptions, subschema: Array<any>): Promise<any> {
         return new Promise(async (resolve, reject) => {
             //Check if empty
             if (item == undefined && !options.reduce) return resolve([]);
@@ -186,7 +186,7 @@ export default class ObjectSchema<T> {
         return new Promise(async (resolve, reject) => {
             if (Array.isArray(schema)) return resolve([]);
 
-            var emptyObject = {};
+            var emptyObject: any = {};
 
             for (const [key, value] of Object.entries(schema)) {
                 if (value.type instanceof Function) {
