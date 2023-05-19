@@ -6,7 +6,7 @@ export interface SchemaOptions {
     strictType?: boolean;
 }
 
-export default class ObjectSchema {
+export default class ObjectSchema<T> {
     private schema: Object | Array<any>;
 
     private readonly DEFAULT_OPTIONS: SchemaOptions = {
@@ -18,15 +18,15 @@ export default class ObjectSchema {
         this.schema = schema;
     }
 
-    filter(item: Object | Array<any>, options: SchemaOptions = this.DEFAULT_OPTIONS): Promise<Object> {
+    filter(item: Object | Array<any>, options: SchemaOptions = this.DEFAULT_OPTIONS): Promise<T> {
         return new Promise((resolve, reject) => {
             if (Array.isArray(this.schema))
-                this.filterArray(<Array<any>>item, options, this.schema)
-                    .then((res) => resolve(res))
+                this.filterArray(item as Array<any>, options, this.schema)
+                    .then((res) => resolve(res as T))
                     .catch((err) => reject(err));
             else
                 this.filterObject(item, options, this.schema)
-                    .then((res) => resolve(res))
+                    .then((res) => resolve(res as T))
                     .catch((err) => reject(err));
         });
     }
@@ -38,7 +38,7 @@ export default class ObjectSchema {
             //Check if empty
             if (item == undefined && !options.reduce) {
                 try {
-                    return resolve(await this.generateEmptyObject(subschema, options));
+                    return resolve((await this.generateEmptyObject(subschema, options)) as T);
                 } catch (error) {
                     return reject(error);
                 }
@@ -105,7 +105,7 @@ export default class ObjectSchema {
                 if (!(options.reduce && formatedValue == undefined)) filteredObject[formatedKey ? formatedKey : key] = formatedValue;
             }
 
-            return resolve(filteredObject);
+            return resolve(filteredObject as T);
         });
     }
 
@@ -137,7 +137,7 @@ export default class ObjectSchema {
                     }
                 } else {
                     try {
-                        formatedArray.push(await this.formatField(subitem, arraySchema, options));
+                        formatedArray.push((await this.formatField(subitem, arraySchema, options)) as T);
                     } catch (error) {
                         return reject(error);
                     }
