@@ -16,6 +16,7 @@ interface User {
     firstName?: string;
     lastName?: string;
     age: number;
+    birthday: Date;
     posts: [
         {
             id?: string;
@@ -29,6 +30,7 @@ const userSchema = new ObjectSchema<User>({
     firstName: String,
     lastName: String,
     age: { type: Number, default: 20 },
+    birthday: { type: Date },
     posts: [
         {
             _id: { type: String, alias: "id" },
@@ -50,13 +52,13 @@ userSchema
 
 ### Field Options
 
-| Option   | Input                     |
-| -------- | ------------------------- |
-| type     | String / Number / Boolean |
-| required | true / false              |
-| default  | any                       |
-| alias    | "aliasName"               |
-| regex    | /regexPatern/             |
+| Option   | Input                            |
+| -------- | -------------------------------- |
+| type     | String / Number / Boolean / Date |
+| required | true / false                     |
+| default  | any                              |
+| alias    | "aliasName"                      |
+| regex    | /regexPatern/                    |
 
 ### Filter Options
 

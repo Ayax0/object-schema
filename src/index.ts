@@ -1,5 +1,5 @@
-type FieldTypesConstructor = StringConstructor | NumberConstructor | BooleanConstructor | ObjectConstructor | ArrayConstructor;
-type FieldTypes = String | Number | Boolean | null | Object | Array<String | Number | Boolean | null | Object>;
+type FieldTypesConstructor = StringConstructor | NumberConstructor | BooleanConstructor | DateConstructor | ObjectConstructor | ArrayConstructor;
+type FieldTypes = String | Number | Boolean | Date | null | Object | Array<String | Number | Boolean | Date | null | Object>;
 
 export interface SchemaOptions {
     reduce?: boolean;
@@ -171,6 +171,11 @@ export default class ObjectSchema<T> {
                             return resolve(data == 1);
                     }
                     return resolve(data);
+                case Date:
+                    if (typeof data == "string") return resolve(new Date(Date.parse(data)));
+                    if (data instanceof Date) return resolve(data);
+                    if (options.strictType) return reject(new Error(`SchemaError: invalide type ${typeof data} expected date`));
+                    return resolve(new Date(data.toString()));
                 default:
                     return resolve(data);
             }

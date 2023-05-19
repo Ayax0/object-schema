@@ -1,6 +1,6 @@
 {
     "name": "@nextlvlup/object-schema",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "main": "lib/index.js",
     "types": "lib",
     "author": "",
