@@ -18,7 +18,7 @@ export default class ObjectSchema<T> {
         this.schema = schema;
     }
 
-    filter(item: Object | Array<any>, options: SchemaOptions = this.DEFAULT_OPTIONS): Promise<T> {
+    filter(item: any | Array<any>, options: SchemaOptions = this.DEFAULT_OPTIONS): Promise<T> {
         return new Promise((resolve, reject) => {
             if (Array.isArray(this.schema))
                 this.filterArray(item as Array<any>, options, this.schema)
@@ -31,7 +31,7 @@ export default class ObjectSchema<T> {
         });
     }
 
-    private filterObject(item: Object, options: SchemaOptions, subschema: Object): Promise<Object> {
+    private filterObject(item: any, options: SchemaOptions, subschema: Object): Promise<Object> {
         return new Promise(async (resolve, reject) => {
             var filteredObject = {};
 

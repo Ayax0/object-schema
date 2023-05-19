@@ -6,7 +6,7 @@ export default class ObjectSchema<T> {
     private schema;
     private readonly DEFAULT_OPTIONS;
     constructor(schema: Object);
-    filter(item: Object | Array<any>, options?: SchemaOptions): Promise<T>;
+    filter(item: any | Array<any>, options?: SchemaOptions): Promise<T>;
     private filterObject;
     private filterArray;
     private formatField;
